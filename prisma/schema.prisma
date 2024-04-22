@@ -1,0 +1,254 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario{
+  id  String @id @default(uuid())
+  name String
+  email String @unique
+  password String
+	created_at DateTime @default(now())
+
+  @@map("usuario")
+}
+
+model Project{
+  id String @id @default(uuid())
+  name String
+  id_user String
+  rodada Int
+  created_at DateTime @default(now())
+
+  @@map("project")
+}
+
+model Image{
+  id String @id @default(uuid())
+  imageName String
+  id_project String
+  height String
+  width String
+  left String
+  top String
+  created_at DateTime @default(now())
+
+  @@map("images")
+}
+
+model Monster_One_Ring{
+  id String @id @default(uuid())
+  nome String
+  image_monster String
+  caracteristicas String
+  nivel_de_atributo String
+  resistencia  String
+  poder String
+  odio String
+  bloqueio String
+  armadura String
+  proeficiencia_de_combate String
+  habilidades_mortais String
+  descricao String
+  grupo String
+  rpg String
+
+  @@map("monsterOneRing")
+}
+
+
+model MasterMonster{
+  id String @id @default(uuid())
+  project_id String
+  nome String
+  nickname String
+  image_monster String
+  caracteristicas String
+  nivel_de_atributo String
+  resistencia  String
+  poder String
+  odio String
+  bloqueio String
+  armadura String
+  proeficiencia_de_combate String
+  habilidades_mortais String
+  descricao String
+  grupo String
+  rpg String
+  rodada Boolean
+  created_at DateTime @default(now())
+  
+  @@map("masterMonster")
+}
+
+
+model PlayerPage{
+  id String @id @default(uuid())
+  name String
+  project_id String
+  rpg String
+  password String
+  created_at DateTime @default(now())
+
+}
+
+model PlayerAcess {
+  id String @id @default(uuid())
+  email String
+  name String
+  project_id String
+  password String
+  created_at DateTime @default(now())
+
+  @@unique([email, project_id])
+}
+
+
+model Player{
+  id String @id @default(uuid())
+  name String
+  image String
+  player_id String
+
+  cultura_heroica String
+  idade String
+  padrao_de_vida String
+  bencao_cultural String
+  patrono String
+  chamado String
+  caminho_das_sombras String
+  tesouro String
+  caracteristicas_notaveis String
+  falhas String
+
+
+  forca_na Int
+  forca_nivel Int
+  forca_resistencia Int
+
+  fascinio Boolean
+  fascinio_bool Int
+  atletismo Boolean
+  atletismo_bool Int
+  vigilancia Boolean
+  vigilancia_bool Int
+  cacada Boolean
+  cacada_bool Int
+  musica Boolean
+  musica_bool Int
+  oficio Boolean
+  oficio_bool Int
+
+  machados_bool Int
+  arcos_bool Int
+  lancas_bool Int
+  espadas_bool Int
+
+
+  coracao_na Int
+  coracao_nivel Int
+  coracao_resistencia Int
+
+  inducao Boolean
+  inducao_bool Int
+  viagem Boolean
+  viagem_bool Int
+  discernimento Boolean
+  discernimento_bool Int
+  cura Boolean
+  cura_bool Int
+  cortesia Boolean
+  cortesia_bool Int
+  batalha Boolean
+  batalha_bool Int
+
+  recompensa String
+  recompensa_valor Int
+
+
+  astucia_na Int
+  astucia_nivel Int
+  astucia_resistencia Int
+
+  persuasao Boolean
+  persuasao_bool Int
+  furtividade Boolean
+  furtividade_bool Int
+  busca Boolean
+  busca_bool Int
+  exploracao Boolean
+  exploracao_bool Int
+  enigma Boolean
+  enigma_bool Int
+  historia Boolean
+  historia_bool Int
+
+  virtudes String
+  virtudes_sabedoria Int
+
+
+  armadura String
+  armadura_protecao Int
+  armadura_carga Int
+  
+  elmo String
+  elmo_protecao Int
+  elmo_carga Int
+
+  escudo String
+  escudo_protecao Int
+  escudo_carga Int
+
+
+  pontos_de_aventura Int
+  pontos_de_pericia Int
+  pontos_de_sociedade Int
+
+  carga_atual Int
+  carga Int
+  fadiga Int
+
+  esperanca_atual Int
+  sombra Int
+  cicatrizes_sombra Int
+
+  ferimento String
+  tempo_ferimento Int
+
+  exausto Boolean
+  arrasado Boolean
+  ferido Boolean
+
+  equipamento_de_viagem String
+
+  created_at DateTime @default(now())
+
+  @@map("personagem")
+}
+
+model PlayerInventory{
+  id String @id @default(uuid())
+  player_id String
+  equipamento_de_guerra String
+  dano Int
+  ferimento Int
+  carga Int
+  anotacao_equipamento String
+
+  created_at DateTime @default(now())
+}
+
+model ChatMessages{
+  id String @id @default(uuid())
+  name String
+  player_id String
+  room String
+  text String
+  created_at DateTime @default(now())
+
+  @@map("chat")
+}
