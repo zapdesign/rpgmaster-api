@@ -53,6 +53,39 @@ export class UploadService {
         return data;
     }
 
+    async uploadFilePLayer(file: FileDTO, id: string){
+        const supabaseURL = "https://dlhkjznxuujoccwupren.supabase.co"
+        const supabaseKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsaGtqem54dXVqb2Njd3VwcmVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcxMDAxMDM5NiwiZXhwIjoyMDI1NTg2Mzk2fQ.pADd5qcmxrBdF-m7-l7tTELxk30rI9p1VUYWrEkgveo"
+
+        const supabase = createClient(supabaseURL, supabaseKEY, {
+            auth: {
+                persistSession: false
+            }
+        })
+
+        const data = await supabase.storage.from("imagesWhiteBoard").upload(`player-${id}`, file.buffer)
+
+        return data;
+    }
+
+    async deleteFilePlayer(id: string) {
+        const supabaseURL = "https://dlhkjznxuujoccwupren.supabase.co"
+        const supabaseKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsaGtqem54dXVqb2Njd3VwcmVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcxMDAxMDM5NiwiZXhwIjoyMDI1NTg2Mzk2fQ.pADd5qcmxrBdF-m7-l7tTELxk30rI9p1VUYWrEkgveo"
+        const supabase = createClient(supabaseURL, supabaseKEY, {
+            auth: {
+                persistSession: false
+            }
+        })
+
+        const { error } = await supabase.storage.from("imagesWhiteBoard").remove([`player-${id}`]);
+
+        if (error) {
+            throw error;
+        }
+
+        return 
+    }
+
     async getImage(imageName: string): Promise<Buffer | null> {
 
         const supabaseURL = "https://dlhkjznxuujoccwupren.supabase.co"
@@ -80,7 +113,7 @@ export class UploadService {
             return buffer;
         } catch (error) {
 
-            const buffer = fs.readFileSync('nofound.png')
+            const buffer = fs.readFileSync('./notfound.png')
             return buffer;
 
         }
