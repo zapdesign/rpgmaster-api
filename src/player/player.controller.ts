@@ -66,4 +66,20 @@ export class PlayerController {
     deleteEquipament(@Param('id') id: string){
         return this.playerService.deleteEquipament(id)
     }
+
+    //Comitiva 
+    @Get('comitiva/:id')
+    findComitiva(@Param('id') id: string){
+        return this.playerService.findComitiva(id)
+    }
+
+    @Get('all-comitiva/:id')
+    findAllComitiva(@Param('id') id: string){
+        return this.playerService.findAllComitiva(id)
+    }
+
+    @Patch('comitiva/:id')
+    updateComitiva(@Param('id') id: string, @Body() updateData: any){
+        return this.playerService.updateComitiva(id, updateData)
+    }
 }

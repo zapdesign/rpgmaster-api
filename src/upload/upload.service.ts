@@ -100,7 +100,7 @@ export class UploadService {
         const { data, error } = await supabase.storage.from("imagesWhiteBoard").download(imageName)
         
         if(error){
-            throw new Error(`Algo deu errado ao baixar a imagem: ${error.message}`)
+            return
         }
 
         if(!data){

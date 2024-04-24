@@ -194,6 +194,28 @@ export class PlayerService {
             }
         })
 
+        await this.prisma.comitiva.create({
+            data: {
+                player_id: newUser.id,
+                project_id: data.project_id,
+                ano: '',
+                estacao: '',
+                jornada_de: '',
+                destino: '',
+                dias_de_viagem: '',
+                nome: '',
+                papel: '',
+                fadiga_da_viagem: 0,
+                ponei_1: '',
+                p1_vigor: 0,
+                ponei_2: '',
+                p2_vigor: 0,
+                ponei_3: '',
+                p3_vigor: 0,
+                diario: ''
+            }
+        })
+
         return {
             ...newUser,
             password: undefined
@@ -302,6 +324,16 @@ export class PlayerService {
             })
         }
 
+        if(attObject.name !== exist.name){
+            await this.prisma.playerAcess.update({
+                where: {
+                    id: attObject.player_id
+                }, data: {
+                    name: attObject.name
+                }
+            })
+        }
+
 
         if(attObject.sombra >= attObject.esperanca_atual && attObject.esperanca_atual !== 0 ){
             await this.prisma.player.update({
@@ -390,6 +422,42 @@ export class PlayerService {
         return
     }
 
+    //Comitiva
+
+    async findComitiva(id: string){
+        return await this.prisma.comitiva.findFirst({
+            where:{
+                player_id: id
+            }
+        })
+    }
+
+    async findAllComitiva(id: string){
+        return await this.prisma.comitiva.findMany({
+            where:{
+                project_id: id
+            }
+        })
+    }
+
+    async updateComitiva(id: string, data: any){
+        const exist = await this.prisma.comitiva.findFirst({
+            where: {
+                player_id: id
+            }
+        })
+
+        if(!exist){
+            throw new Error(`Comitiva não encontrado.`)
+        }
+
+        await this.prisma.comitiva.updateMany({
+            where: {
+                player_id: id
+            }, data: {...data}
+        })
+    }
+ 
 
     //Player acess
 

@@ -242,6 +242,35 @@ model PlayerInventory{
   created_at DateTime @default(now())
 }
 
+model Comitiva {
+  id String @id @default(uuid())
+  player_id String
+  project_id String
+
+  ano String
+  estacao String
+  jornada_de String
+  destino String
+  dias_de_viagem String
+
+  nome String
+  papel String
+  fadiga_da_viagem Int
+
+  ponei_1 String
+  p1_vigor Int
+  ponei_2 String
+  p2_vigor Int
+  ponei_3 String
+  p3_vigor Int
+
+  diario String
+
+  created_at DateTime @default(now())
+
+  @@map("Comitiva")
+}
+
 model ChatMessages{
   id String @id @default(uuid())
   name String
