@@ -10,6 +10,8 @@ export class ChatController {
         return this.prisma.chatMessages.findMany({
             where: {
                 room: id
+            }, orderBy: {
+                created_at: 'asc'
             }
         })
     }
