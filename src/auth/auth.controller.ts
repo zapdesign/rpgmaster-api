@@ -21,10 +21,9 @@ export class AuthController {
     @IsPublic()
     @Post('player-login')
     @HttpCode(HttpStatus.OK)
-    async playerLogin(@Request() req: AuthRequestPlayer, @Body() body: {email: string, password: string, projectId: string}) {
-      const { email, password, projectId } = body;
-      console.log(projectId)
-      const user = await this.playerService.validateUser(email, password, projectId);
+    async playerLogin(@Request() req: AuthRequestPlayer, @Body() body: {email: string, password: string, project_id: string}) {
+      const { email, password, project_id } = body;
+      const user = await this.playerService.validateUser(email, password, project_id);
       return this.playerService.login(user);
     }
 }

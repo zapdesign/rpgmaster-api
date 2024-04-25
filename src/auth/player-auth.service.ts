@@ -21,7 +21,6 @@ export class PlayerAuthService {
       project_id: user.project_id
     };
     
-    console.log(payload)
     return {
       access_token: this.jwtService.sign(payload),
     };

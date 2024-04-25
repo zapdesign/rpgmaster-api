@@ -66,7 +66,7 @@ export class PlayerService {
             data: {...data, password: projectPass.password}
         })
 
-        await this.prisma.player.create({
+        const player = await this.prisma.player.create({
             data: {
                 name: newUser.name, 
                 player_id: newUser.id,
@@ -196,14 +196,14 @@ export class PlayerService {
 
         await this.prisma.comitiva.create({
             data: {
-                player_id: newUser.id,
+                player_id: player.id,
                 project_id: data.project_id,
                 ano: '',
                 estacao: '',
                 jornada_de: '',
                 destino: '',
                 dias_de_viagem: '',
-                nome: '',
+                nome: player.name,
                 papel: '',
                 fadiga_da_viagem: 0,
                 ponei_1: '',
@@ -330,6 +330,14 @@ export class PlayerService {
                     id: attObject.player_id
                 }, data: {
                     name: attObject.name
+                }
+            })
+            console.log(attObject.id)
+            await this.prisma.comitiva.updateMany({
+                where: {
+                    player_id: attObject.id
+                }, data: {
+                    nome: attObject.name
                 }
             })
         }
