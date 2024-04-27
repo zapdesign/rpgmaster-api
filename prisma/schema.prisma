@@ -80,8 +80,10 @@ model MasterMonster{
   grupo String
   rpg String
   rodada Boolean
+  index Int
   created_at DateTime @default(now())
   
+  @@unique([project_id, index], name: "UniqueProjectIndex")
   @@map("masterMonster")
 }
 
@@ -280,4 +282,30 @@ model ChatMessages{
   created_at DateTime @default(now())
 
   @@map("chat")
+}
+
+
+model ImagemMaster{
+  id String @id @default(uuid())
+  name String
+  type String
+  image_name String
+  project_id String
+  player_visible Boolean
+
+  created_at DateTime @default(now())
+
+  @@map("masterImage")
+}
+
+model ImagePlayer{
+  id String @id @default(uuid())
+  name String
+  type String
+  image_name String
+  project_id String
+
+  created_at DateTime @default(now())
+
+  @@map("playerImageProject")
 }

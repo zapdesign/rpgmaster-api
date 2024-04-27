@@ -1,18 +1,18 @@
-import { Controller, Delete, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UploadService } from './upload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FileDTO } from './dto/upload-dto';
+import { FileDTO, MasterImage } from './dto/upload-dto';
 
 
 @Controller('upload')
 export class UploadController {
     constructor(private readonly uploadService: UploadService) {}
 
-    @Post(':id')
+    @Post('/master-image/')
     @UseInterceptors(FileInterceptor('file'))
-    async uploadFile(@UploadedFile() file: FileDTO, @Param('id') id: string){
-        const result = await this.uploadService.upload(file, id)
-        return result
+    async uploadMasterimage(@UploadedFile() file: FileDTO,@Body() body: MasterImage){
+        await this.uploadService.uploadMasterimage(file, body)
+        return 
     }
 
     @Post('/player/:id')
@@ -37,4 +37,5 @@ export class UploadController {
 
         return image
     }
+
 }

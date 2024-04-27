@@ -11,7 +11,32 @@ export class AllMonsterService {
     }
     
     async createMonsterMaster(data: MonsterMasterDTO){
-        return this.prisma.masterMonster.create({data})
+
+        const existingItems = await this.prisma.masterMonster.findMany({
+            where: {
+                project_id: data.project_id
+            },
+            select: {
+                index: true
+            }
+        });
+
+        const maxIndex = existingItems.reduce((max, item) => {
+            return item.index > max ? item.index : max;
+        }, 0);
+    
+        // Atribui um novo índice ao novo item com um valor maior do que o maior índice encontrado
+        const newIndex = maxIndex + 1;
+
+        console.log(newIndex)
+
+
+        return this.prisma.masterMonster.create({
+            data: {
+                ...data,
+                index: newIndex
+            }
+        })
     }
 
     async findAll(){
@@ -32,7 +57,7 @@ export class AllMonsterService {
             where: {
                 project_id: projectId
             }, orderBy: {
-                created_at: 'asc'
+                index: 'asc'
             }
         })
     }

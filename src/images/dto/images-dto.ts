@@ -6,3 +6,17 @@ export type ImagesDTO = {
     left: string
     top: string
 }
+export type MasterImage = {
+    name: string
+    type: string
+    image_name: string
+    project_id: string
+    player_visible: boolean
+}
+
+export type PlayerImageProject = {
+    name: string
+    type: string
+    image_name: string
+    project_id: string
+}

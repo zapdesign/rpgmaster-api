@@ -6,6 +6,6 @@ import { ImagesModule } from 'src/images/images.module';
 @Module({
   imports: [ImagesModule],
   controllers: [UploadController],
-  providers: [UploadService]
+  providers: [UploadService],
 })
 export class UploadModule {}

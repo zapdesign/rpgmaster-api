@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { FileDTO } from './dto/upload-dto';
+import { FileDTO, MasterImage } from './dto/upload-dto';
 import { createClient } from '@supabase/supabase-js';
 import { Buffer } from 'buffer';
 import { v4 as uuidv4 } from 'uuid';
 import { ImagesService } from 'src/images/images.service';
-import * as sharp from 'sharp';
 import fs from 'fs';
 
 
@@ -12,13 +11,11 @@ import fs from 'fs';
 export class UploadService {
     constructor(private readonly imagesService: ImagesService) {}
     
-    async upload(file: FileDTO, id: string){
+    async uploadMasterimage(file: FileDTO, body: MasterImage){
 
         const supabaseURL = "https://dlhkjznxuujoccwupren.supabase.co"
         const supabaseKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsaGtqem54dXVqb2Njd3VwcmVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcxMDAxMDM5NiwiZXhwIjoyMDI1NTg2Mzk2fQ.pADd5qcmxrBdF-m7-l7tTELxk30rI9p1VUYWrEkgveo"
 
-
-       
         const supabase = createClient(supabaseURL, supabaseKEY, {
             auth: {
                 persistSession: false
@@ -27,30 +24,26 @@ export class UploadService {
 
         const newName = uuidv4()
 
-        let width = 0
-        let height = 0
+        let newPlayerVisible = false
 
-        try {
-            const metadata = await sharp(file.buffer).metadata();
-            width = metadata.width;
-            height = metadata.height;
-        } catch (err) {
-            return console.error('Erro ao obter metadados da imagem:', err);
+        if(body.player_visible === "true"){
+            newPlayerVisible = true
         }
 
-        const data = await supabase.storage.from("imagesWhiteBoard").upload(`image${newName}`, file.buffer)
+        const data = await supabase.storage.from("imagesWhiteBoard").upload(`projectImage-${newName}`, file.buffer)
         
-
-        await this.imagesService.create({
-            imageName: `image${newName}`,
-            id_project: id,
-            height: `${height}`,
-            width: `${width}`,
-            left: "10",
-            top: "10"
+        if(!data){
+            throw new Error(`Imagem não foi adicionada`)
+        }
+        await this.imagesService.createMaster({
+                name: body.name,
+                type: body.type,
+                image_name: `projectImage-${newName}`,
+                project_id: body.project_id,
+                player_visible: newPlayerVisible
         })
 
-        return data;
+        return
     }
 
     async uploadFilePLayer(file: FileDTO, id: string){

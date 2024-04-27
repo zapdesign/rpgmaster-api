@@ -33,4 +33,6 @@ export type MonsterMasterDTO = {
     grupo: string
     rpg: string
     rodada: boolean
+    index: number
+
   }
