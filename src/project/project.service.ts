@@ -40,6 +40,13 @@ export class ProjectService {
         }
        })
 
+       await this.prisma.atualImage.create({
+        data: {
+            project_id: created.id,
+            text: ""
+        }
+       })
+
        return
     }
 
@@ -66,29 +73,53 @@ export class ProjectService {
             throw new Error('Esse projeto não existe.')
         }   
 
+        await this.prisma.playerPage.deleteMany({
+            where: {
+                project_id: id
+            }
+        })
+    
+        await this.prisma.atualImage.deleteMany({
+            where: {
+                project_id: id
+            }
+        })
+
+        await this.prisma.atualImage.deleteMany({
+            where: {
+                project_id: id
+            }
+        })
+        
+        await this.prisma.chatMessages.deleteMany({
+            where: {
+                room: id
+            }
+        })
+
+        await this.prisma.imagemMaster.deleteMany({
+            where: {
+                project_id: id
+            }
+        })
+
         await this.prisma.masterMonster.deleteMany({
             where: {
                 project_id: id
             }
         })
 
-        await this.prisma.project.delete({
-            where: {
-                id
-            }
-        })
-
-        await this.prisma.playerPage.deleteMany({
+        const playersActive = await this.prisma.playerAcess.findMany({
             where: {
                 project_id: id
             }
         })
 
-        await this.prisma.chatMessages.deleteMany({
-            where: {
-                room: id
-            }
-        })            
+        if(playersActive){
+            playersActive.map((cada) => {
+                this.playerService.delAcess(cada.id)
+            })
+        }
 
         return 'Deu tudo certo!'
     }

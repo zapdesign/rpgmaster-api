@@ -12,6 +12,7 @@ export type MasterImage = {
     image_name: string
     project_id: string
     player_visible: boolean
+    is_active: boolean
 }
 
 export type PlayerImageProject = {

@@ -40,7 +40,8 @@ export class UploadService {
                 type: body.type,
                 image_name: `projectImage-${newName}`,
                 project_id: body.project_id,
-                player_visible: newPlayerVisible
+                player_visible: newPlayerVisible,
+                is_active: false
         })
 
         return

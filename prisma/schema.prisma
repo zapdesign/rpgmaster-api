@@ -27,19 +27,6 @@ model Project{
   @@map("project")
 }
 
-model Image{
-  id String @id @default(uuid())
-  imageName String
-  id_project String
-  height String
-  width String
-  left String
-  top String
-  created_at DateTime @default(now())
-
-  @@map("images")
-}
-
 model Monster_One_Ring{
   id String @id @default(uuid())
   nome String
@@ -284,6 +271,15 @@ model ChatMessages{
   @@map("chat")
 }
 
+model AtualImage{
+  id String @id @default(uuid())
+  project_id String
+  text String
+  created_at DateTime @default(now())
+
+  @@map("atualImage")
+}
+
 
 model ImagemMaster{
   id String @id @default(uuid())
@@ -292,6 +288,7 @@ model ImagemMaster{
   image_name String
   project_id String
   player_visible Boolean
+  is_active Boolean
 
   created_at DateTime @default(now())
 

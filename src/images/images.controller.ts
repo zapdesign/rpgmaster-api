@@ -26,6 +26,11 @@ export class ImagesController {
         return this.imagesService.findAllPlayer(id, type)
     }
 
+    @Get('atual-image/:id')
+    findAtualImage(@Param('id') id: string){
+        return this.imagesService.findAtualImage(id)
+    }
+
     @Patch('update-master-project/:id')
     attImageMasterPlayer(@Param('id') id: string, @Body() body: any){
         return this.imagesService.attImageMasterPlayer(id, body)

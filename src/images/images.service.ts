@@ -58,6 +58,15 @@ export class ImagesService {
         })
     }
 
+
+    async findAtualImage(id: string){
+        return await this.prisma.atualImage.findMany({
+            where: {
+                project_id: id
+            }
+        })
+    }
+
     async attImageMasterPlayer(id: string, body: any){
         const exist = await this.prisma.imagemMaster.findUnique({
             where: {
@@ -67,7 +76,24 @@ export class ImagesService {
 
         if(!exist){
             return
+        }  
+
+        console.log(body)
+
+        if(body.is_active === true){
+            await this.prisma.imagemMaster.updateMany({
+                where: {
+                    project_id: exist.project_id,
+                    NOT: {
+                        id: id
+                    }
+                },
+                data: {
+                    is_active: false
+                }
+            });
         }
+    
 
         await this.prisma.imagemMaster.update({
             where: {

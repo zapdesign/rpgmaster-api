@@ -265,7 +265,19 @@ export class PlayerService {
             }
         })
 
-        await this.prisma.playerAcess.delete({
+        await this.prisma.playerInventory.deleteMany({
+            where: {
+                player_id: id
+            }
+        })
+
+        await this.prisma.comitiva.deleteMany({
+            where: {
+                player_id: id
+            }
+        })
+
+        await this.prisma.playerAcess.deleteMany({
             where: {
                 id
             }
@@ -369,6 +381,9 @@ export class PlayerService {
         const equipament = await this.prisma.playerInventory.findMany({
             where: {
                 player_id: id
+            }, 
+            orderBy: {
+                created_at: "asc"
             }
         })        
 

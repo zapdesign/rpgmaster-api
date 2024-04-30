@@ -14,7 +14,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @SubscribeMessage('msgToServer')
   async handleMessage(client: Socket, payload: { room: string, text: string, name: string, player_id: string}) {
-    console.log(payload)
     await this.prisma.chatMessages.create({
       data: {
         name: payload.name,
@@ -24,6 +23,18 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       } 
     })
     this.server.to(payload.room).emit('msgToClient', payload)
+  }
+
+  @SubscribeMessage('msgChangeImage')
+  async handleAttMsg(client: Socket, payload: { room: string, text: string}) {
+    await this.prisma.atualImage.updateMany({
+      where: {
+        project_id: payload.room
+      }, data: {
+        text: payload.text
+      } 
+    })
+    this.server.to(payload.room).emit('msgChangeImage', payload)
   }
 
   @SubscribeMessage('joinRoom')
