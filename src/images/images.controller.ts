@@ -1,20 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ImagesDTO } from './dto/images-dto';
+import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { ImagesService } from './images.service';
 
 @Controller('images')
 export class ImagesController {
     constructor(private readonly imagesService: ImagesService) {}
-
-    @Post()
-    create(@Body() body: ImagesDTO){
-        return this.imagesService.create(body)
-    }
-
-    @Get(':id')
-    findAll(@Param('id') id: string){
-        return this.imagesService.findAll(id)
-    }
 
     @Get('master-project/:id/:type')
     findAllMasterImages(@Param('id') id: string, @Param('type') type: string){

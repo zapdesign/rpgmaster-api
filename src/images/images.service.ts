@@ -1,15 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/PrismaService';
-import { ImagesDTO, MasterImage, PlayerImageProject } from './dto/images-dto';
+import { MasterImage, PlayerImageProject } from './dto/images-dto';
 import { createClient } from '@supabase/supabase-js';
 
 @Injectable()
 export class ImagesService {
     constructor(private readonly prisma: PrismaService) {}
-
-    async create(data: ImagesDTO){
-        await this.prisma.image.create({data})        
-    }
 
     async createMaster(data: MasterImage){
         await this.prisma.imagemMaster.create({data})        
@@ -19,21 +15,6 @@ export class ImagesService {
         await this.prisma.imagePlayer.create({data})        
     }
 
-
-    async findAll(id: string){
-        const response = await this.prisma.image.findMany({
-            where: {
-                id_project: id
-            }
-        })
-
-
-        if(!response){
-            return
-        }
-
-        return response
-    }
 
     async findAllMasterImages(id: string, type: string){
         return this.prisma.imagemMaster.findMany({
