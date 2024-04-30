@@ -3,10 +3,11 @@ import { PrismaService } from 'src/database/PrismaService';
 import { CreateProjectDto } from './dto/create-project-dto';
 import { hash } from 'bcrypt';
 import { PlayerService } from 'src/player/player.service';
+import { ImagesService } from 'src/images/images.service';
 
 @Injectable()
 export class ProjectService {
-    constructor(private readonly prisma: PrismaService, private readonly playerService: PlayerService) {}
+    constructor(private readonly prisma: PrismaService, private readonly playerService: PlayerService, private readonly imageService: ImagesService) {}
 
     
 
@@ -97,11 +98,18 @@ export class ProjectService {
             }
         })
 
-        await this.prisma.imagemMaster.deleteMany({
+        const images = await this.prisma.imagemMaster.findMany({
             where: {
                 project_id: id
             }
         })
+
+        if(images){
+            images.map((cada) => {
+                 this.imageService.deleteMasterPlayer(cada.id)
+            })
+        }
+
 
         await this.prisma.masterMonster.deleteMany({
             where: {
@@ -116,10 +124,16 @@ export class ProjectService {
         })
 
         if(playersActive){
-            playersActive.map((cada) => {
-                this.playerService.delAcess(cada.id)
+            playersActive.map( async(cada) => {
+                await this.playerService.delAcess(cada.id)
             })
         }
+
+        await this.prisma.project.delete({
+            where: {
+                id
+            }
+        })
 
         return 'Deu tudo certo!'
     }

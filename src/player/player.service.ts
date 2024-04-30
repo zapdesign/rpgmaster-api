@@ -2,10 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { hash } from 'bcrypt';
 import { PlayerAcess } from './dto/player-dto';
 import { PrismaService } from 'src/database/PrismaService';
+import { ImagesService } from 'src/images/images.service';
 
 @Injectable()
 export class PlayerService {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor(private readonly prisma: PrismaService, private readonly imageService: ImagesService) {}
 
 
     async findSection(id: string){
@@ -253,7 +254,15 @@ export class PlayerService {
             throw new Error(`Usuário não existe.`)
         }
 
-        await this.prisma.player.deleteMany({
+        const response = await this.prisma.player.findFirst({
+            where: {
+                player_id: id
+            }
+        })
+
+        await this.imageService.deleteImage(`player-${response.id}`)
+
+        this.prisma.player.deleteMany({
             where: {
                 player_id: id
             }
@@ -265,19 +274,14 @@ export class PlayerService {
             }
         })
 
-        await this.prisma.playerInventory.deleteMany({
-            where: {
-                player_id: id
-            }
-        })
 
         await this.prisma.comitiva.deleteMany({
             where: {
-                player_id: id
+                player_id: response.id
             }
         })
 
-        await this.prisma.playerAcess.deleteMany({
+        await this.prisma.playerAcess.delete({
             where: {
                 id
             }
