@@ -8,7 +8,6 @@ export class UsersService {
     constructor(private readonly prisma: PrismaService) {}
 
     async findOne(id: string){
-
         const user = await this.prisma.usuario.findFirst({
             where: {
                 id

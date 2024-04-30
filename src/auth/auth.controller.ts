@@ -14,8 +14,7 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @UseGuards(LocalAuthGuard)
     login(@Request() req: AuthRequest){
-        return this.authService.login(req.user)
-
+      return this.authService.login(req.user)
     }
 
     @IsPublic()

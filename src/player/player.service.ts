@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { hash } from 'bcrypt';
 import { PlayerAcess } from './dto/player-dto';
 import { PrismaService } from 'src/database/PrismaService';
-import { ImagesService } from 'src/images/images.service';
+import { createClient } from '@supabase/supabase-js';
 
 @Injectable()
 export class PlayerService {
-    constructor(private readonly prisma: PrismaService, private readonly imageService: ImagesService) {}
+    constructor(private readonly prisma: PrismaService) {}
 
 
     async findSection(id: string){
@@ -242,6 +242,24 @@ export class PlayerService {
         })
     }
 
+    async deleteImage(name: string) {
+        const supabaseURL = "https://dlhkjznxuujoccwupren.supabase.co"
+        const supabaseKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsaGtqem54dXVqb2Njd3VwcmVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcxMDAxMDM5NiwiZXhwIjoyMDI1NTg2Mzk2fQ.pADd5qcmxrBdF-m7-l7tTELxk30rI9p1VUYWrEkgveo"
+        const supabase = createClient(supabaseURL, supabaseKEY, {
+            auth: {
+                persistSession: false
+            }
+        })
+
+        const { error } = await supabase.storage.from("imagesWhiteBoard").remove([`${name}`]);
+
+        if (error) {
+            throw error;
+        }
+
+        return 
+    }
+
     async delAcess(id: string){
 
         const exist = await this.prisma.playerAcess.findUnique({
@@ -260,7 +278,7 @@ export class PlayerService {
             }
         })
 
-        await this.imageService.deleteImage(`player-${response.id}`)
+        await this.deleteImage(`player-${response.id}`)
 
         this.prisma.player.deleteMany({
             where: {
