@@ -10,6 +10,11 @@ export class AllMonsterController {
     create(@Body() body: MonsterDTO){
         return this.monsterService.create(body)
     }
+
+    @Delete(':id')
+    deleteMonsterGeral(@Param('id') id: string){
+        return this.monsterService.deleteMonsterGeral(id)
+    }
     
     @Get()
     findAll(){

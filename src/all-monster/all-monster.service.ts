@@ -88,6 +88,26 @@ export class AllMonsterService {
         })
     }
 
+    
+    async deleteMonsterGeral(id: string){
+        const exist = await this.prisma.monster_One_Ring.findFirst({
+            where: {
+                id
+            }
+        })
+       
+        if(!exist){
+            throw new Error(`Monstro não encontrado`)
+        }
+
+        return await this.prisma.monster_One_Ring.delete({
+            where: {
+                id
+            }
+        })
+
+    }
+
 
     async delete(id: string){
         const exist = await this.prisma.masterMonster.findFirst({
