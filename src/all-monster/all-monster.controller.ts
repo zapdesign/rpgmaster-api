@@ -11,7 +11,7 @@ export class AllMonsterController {
         return this.monsterService.create(body)
     }
 
-    @Delete(':id')
+    @Delete('monster-onering/:id')
     deleteMonsterGeral(@Param('id') id: string){
         return this.monsterService.deleteMonsterGeral(id)
     }
