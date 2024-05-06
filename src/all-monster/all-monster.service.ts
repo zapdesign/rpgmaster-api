@@ -28,8 +28,6 @@ export class AllMonsterService {
         // Atribui um novo índice ao novo item com um valor maior do que o maior índice encontrado
         const newIndex = maxIndex + 1;
 
-        console.log(newIndex)
-
 
         return this.prisma.masterMonster.create({
             data: {

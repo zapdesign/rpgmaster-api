@@ -366,7 +366,6 @@ export class PlayerService {
                     name: attObject.name
                 }
             })
-            console.log(attObject.id)
             await this.prisma.comitiva.updateMany({
                 where: {
                     player_id: attObject.id

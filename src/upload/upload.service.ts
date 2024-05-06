@@ -80,7 +80,7 @@ export class UploadService {
         return 
     }
 
-    async getImage(imageName: string): Promise<Buffer | null> {
+    async getImage(imageName: string): Promise<string> {
 
         const supabaseURL = "https://dlhkjznxuujoccwupren.supabase.co"
         const supabaseKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsaGtqem54dXVqb2Njd3VwcmVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcxMDAxMDM5NiwiZXhwIjoyMDI1NTg2Mzk2fQ.pADd5qcmxrBdF-m7-l7tTELxk30rI9p1VUYWrEkgveo"
@@ -89,27 +89,15 @@ export class UploadService {
                 persistSession: false
             }
         })
-
-
-        const { data, error } = await supabase.storage.from("imagesWhiteBoard").download(imageName)
         
-        if(error){
-            return
-        }
+        const { data  } = await supabase.storage.from("imagesWhiteBoard").getPublicUrl(imageName)
 
-        if(!data){
+
+        if(!data.publicUrl){
             throw new Error(`Imagem não encontrada.`)
         }
 
-        try {
-            const arrayBuffer = await data.arrayBuffer();
-            const buffer = Buffer.from(arrayBuffer);
-            return buffer;
-        } catch (error) {
-
-            const buffer = fs.readFileSync('./notfound.png')
-            return buffer;
-
-        }
+        return data.publicUrl
+        
     }
 }

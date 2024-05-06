@@ -59,8 +59,6 @@ export class ImagesService {
             return
         }  
 
-        console.log(body)
-
         if(body.is_active === true){
             await this.prisma.imagemMaster.updateMany({
                 where: {
