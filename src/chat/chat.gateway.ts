@@ -1,62 +1,79 @@
-import { Logger } from '@nestjs/common';
-import { OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
-import { PrismaService } from 'src/database/PrismaService';
+// import { Logger } from '@nestjs/common';
+// import {
+//   OnGatewayConnection,
+//   OnGatewayDisconnect,
+//   OnGatewayInit,
+//   SubscribeMessage,
+//   WebSocketGateway,
+//   WebSocketServer,
+// } from '@nestjs/websockets';
+// import { Server, Socket } from 'socket.io';
+// import { PrismaService } from 'src/database/PrismaService';
 
-@WebSocketGateway({cors: true})
-export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private readonly prisma: PrismaService) {}
+// @WebSocketGateway({ cors: true })
+// export class ChatGateway
+//   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+// {
+//   constructor(private readonly prisma: PrismaService) {}
 
-  @WebSocketServer() server: Server;
-  
-  private logger: Logger = new Logger('AppGateway');
+// @WebSocketServer() server: Server;
 
+// private logger: Logger = new Logger('AppGateway');
 
-  @SubscribeMessage('msgToServer')
-  async handleMessage(client: Socket, payload: { room: string, text: string, name: string, player_id: string}) {
-    await this.prisma.chatMessages.create({
-      data: {
-        name: payload.name,
-        player_id: payload.player_id,
-        room: payload.room, 
-        text: payload.text
-      } 
-    })
-    this.server.to(payload.room).emit('msgToClient', payload)
-  }
+// @SubscribeMessage('msgToServer')
+// async handleMessage(
+//   client: Socket,
+//   payload: { room: string; text: string; name: string; player_id: string },
+// ) {
+//   await this.prisma.chatMessages.create({
+//     data: {
+//       name: payload.name,
+//       player_id: payload.player_id,
+//       room: payload.room,
+//       text: payload.text,
+//     },
+//   });
+//   this.server.to(payload.room).emit('msgToClient', payload);
+// }
 
-  @SubscribeMessage('msgChangeImage')
-  async handleAttMsg(client: Socket, payload: { room: string, text: string}) {
-    await this.prisma.atualImage.updateMany({
-      where: {
-        project_id: payload.room
-      }, data: {
-        text: payload.text
-      } 
-    })
-    this.server.to(payload.room).emit('msgChangeImage', payload)
-  }
+// @SubscribeMessage('msgChangeImage')
+// async handleAttMsg(client: Socket, payload: { room: string; text: string }) {
+//   await this.prisma.atualImage.updateMany({
+//     where: {
+//       project_id: payload.room,
+//     },
+//     data: {
+//       text: payload.text,
+//     },
+//   });
+//   this.server.to(payload.room).emit('msgChangeImage', payload);
+// }
 
-  @SubscribeMessage('joinRoom')
-  handleJoinRoom(client: Socket, room: string){
-    this.logger.log(`joinRoom: ${client.id}, ${room} `)
-    client.join(room)
-  }
-  
-  @SubscribeMessage('leaveRoom')
-  handleLeaveRoom(client: Socket, room: string){
-    client.leave(room)
-  }
+// @SubscribeMessage('msgPlayAudio')
+// async(client: Socket, payload: { room: string; text: string }) {
+//   this.server.to(payload.room).emit('msgPlayAudio', payload);
+// }
 
-  afterInit(server: Server) {
-    this.logger.log('Init');
-  }
+// @SubscribeMessage('joinRoom')
+// handleJoinRoom(client: Socket, room: string) {
+//   this.logger.log(`joinRoom: ${client.id}, ${room} `);
+//   client.join(room);
+// }
 
-  handleConnection(client: Socket) {
-    this.logger.log( `Client connected: ${client.id}`);
-  }
+// @SubscribeMessage('leaveRoom')
+// handleLeaveRoom(client: Socket, room: string) {
+//   client.leave(room);
+// }
 
-  handleDisconnect(client: Socket) {
-    this.logger.log( `Client disconnected: ${client.id}`);
-  }
-}
+// afterInit(server: Server) {
+//   this.logger.log('Init');
+// }
+
+// handleConnection(client: Socket) {
+//   this.logger.log(`Client connected: ${client.id}`);
+// }
+
+// handleDisconnect(client: Socket) {
+//   this.logger.log(`Client disconnected: ${client.id}`);
+// }
+// }
